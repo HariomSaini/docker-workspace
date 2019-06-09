@@ -16,7 +16,7 @@ services:
       - elk
 
   logstash:
-    image: docker.elastic.co/kibana/kibana:7.1.1
+    image: docker.elastic.co/logstash/logstash:7.1.1
     volumes:
       - ./logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml:ro
       - ./logstash/pipeline:/usr/share/logstash/pipeline:ro
@@ -31,10 +31,8 @@ services:
       - elasticsearch
 
   kibana:
-    build:
-      context: kibana/
-      args:
-        ELK_VERSION: $ELK_VERSION
+    image: docker.elastic.co/kibana/kibana:7.1.1
+
     volumes:
       - ./kibana/config/kibana.yml:/usr/share/kibana/config/kibana.yml:ro
     ports:
@@ -43,6 +41,20 @@ services:
       - elk
     depends_on:
       - elasticsearch
+
+  filebeat:
+    image: docker.elastic.co/beats/filebeat:7.1.1
+    networks:
+      - elk
+    volumes:
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./filebeat/config/*:/usr/share/filebeat/config.yml:ro
+  
+    depends_on:
+      - elasticsearch 
+      - kibana
+      - logstash
 
 networks:
 

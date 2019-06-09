@@ -1,0 +1,8 @@
+version: '2'
+
+services:
+
+  filebeat:
+    image: docker.elastic.co/beats/filebeat:7.1.1
+    volumes:
+      - ./filebeat/config:/etc/filebeat
