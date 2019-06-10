@@ -43,13 +43,14 @@ services:
       - elasticsearch
 
   filebeat:
-    image: docker.elastic.co/beats/filebeat:7.1.1
+    build: ./filebeat/
+    # image: custom_filebeat
     networks:
       - elk
     volumes:
       - /var/lib/docker/containers:/var/lib/docker/containers:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      - ./filebeat/config/*:/usr/share/filebeat/config.yml:ro
+      # - /filebeat/config/:/usr/share/filebeat:ro
   
     depends_on:
       - elasticsearch 
