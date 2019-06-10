@@ -44,14 +44,11 @@ services:
 
   filebeat:
     build: ./filebeat/
-    # image: custom_filebeat
     networks:
       - elk
     volumes:
       - /var/lib/docker/containers:/var/lib/docker/containers:ro
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-      # - /filebeat/config/:/usr/share/filebeat:ro
-  
+      - /var/run/docker.sock:/var/run/docker.sock:ro  
     depends_on:
       - elasticsearch 
       - kibana
