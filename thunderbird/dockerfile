@@ -1,0 +1,21 @@
+FROM firefox_final
+
+RUN yum clean all -y 
+
+RUN rm /entrypoint.sh
+
+RUN yum remove firefox -y
+
+RUN yum install thunderbird  -y 
+
+RUN yum clean all -y
+
+COPY entrypoint.sh /
+
+VOLUME /root
+
+WORKDIR /root
+
+EXPOSE 10000
+
+CMD ["/entrypoint.sh"]
