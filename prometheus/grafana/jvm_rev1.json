@@ -1,0 +1,11 @@
+--2019-06-20 15:44:32--  https://grafana.com/api/dashboards/3066/revisions/1/download
+Resolving grafana.com (grafana.com)... 35.241.23.245
+Connecting to grafana.com (grafana.com)|35.241.23.245|:443... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 13502 (13K) [application/json]
+Saving to: ‘download’
+
+     0K .......... ...                                        100%  891K=0.01s
+
+2019-06-20 15:44:33 (891 KB/s) - ‘download’ saved [13502/13502]
+
