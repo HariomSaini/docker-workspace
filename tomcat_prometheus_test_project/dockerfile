@@ -1,6 +1,0 @@
-FROM tomcat
-RUN mkdir /data
-ADD jmx_prometheus_javaagent-0.11.0.jar /data/jmx_prometheus_javaagent-0.11.0.jar
-ADD prometheus-jmx-config.yaml /data/prometheus-jmx-config.yaml
-ADD demo.jar .
-CMD java -javaagent:/data/jmx_prometheus_javaagent-0.11.0.jar=8088:/data/prometheus-jmx-config.yaml -jar $TOMCAT_HOME/demo.jar

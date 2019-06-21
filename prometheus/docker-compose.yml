@@ -43,6 +43,17 @@ services:
         volumes:
             - 'grafana_data:/var/lib/grafana'
 
+    tomcat: 
+        build: ./tomcat/
+        container_name: tomcat
+        depends_on: 
+            - prometheus
+        ports:
+            - '8080:8080'
+            - '8090:8090'
+        networks: 
+            - 'prom_net'
+
 networks:
   prom_net:
     driver: bridge
