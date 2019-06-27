@@ -24,9 +24,12 @@ services:
             - '9100:9100'
         networks:
             - prom_net
-        # command:
+        command:
             # - '--path.procfs=/host/proc'
             # - '--path.sysfs=/host/sys'
+            - '--collector.netstat.fields=(.*)'
+            - '--collector.vmstat.fields=(.*)'
+            - '--collector.interrupts'
         depends_on:
             - prometheus
     grafana:
