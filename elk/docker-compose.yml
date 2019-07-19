@@ -81,11 +81,13 @@ services:
     image: hariomsaini/elastalert
     container_name: elastalert
     ports:
-      "3030:3030"
-      "3333:3333"
+      - "3030:3030"
+      - "3333:3333"
     networks:
       - elk
     volumes:
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro  
       - ./elastalert/config/elastalert.yaml:/opt/elastalert/config.yaml
       - ./elastalert/config/elastalert-test.yaml:/opt/elastalert/config-test.yaml
       - ./elastalert/config/config.json:/opt/elastalert-server/config/config.json
