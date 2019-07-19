@@ -1,11 +1,13 @@
-version: '2'
+
+version: '3'
 
 services:
 
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.1.1
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.5.4
     volumes:
       - ./elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro
+    container_name: elasticsearch
     ports:
       - "9200:9200"
       - "9300:9300"
@@ -16,13 +18,14 @@ services:
       - elk
 
   logstash:
-    image: docker.elastic.co/logstash/logstash:7.1.1
+    image: docker.elastic.co/logstash/logstash:6.5.4
     volumes:
-      - ./logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml:ro
-      - ./logstash/pipeline:/usr/share/logstash/pipeline:ro
+      - ./logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml
+      - ./logstash/pipeline:/usr/share/logstash/pipeline
     ports:
       - "5000:5000"
       - "9600:9600"
+    container_name: logstash
     environment:
       LS_JAVA_OPTS: "-Xmx256m -Xms256m"
     networks:
@@ -31,8 +34,8 @@ services:
       - elasticsearch
 
   kibana:
-    image: docker.elastic.co/kibana/kibana:7.1.1
-
+    image: docker.elastic.co/kibana/kibana:6.5.4
+    container_name: kibana
     volumes:
       - ./kibana/config/kibana.yml:/usr/share/kibana/config/kibana.yml:ro
     ports:
@@ -44,6 +47,7 @@ services:
 
   filebeat:
     build: ./filebeat/
+    container_name: filebeat
     networks:
       - elk
     volumes:
@@ -51,23 +55,42 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro  
     depends_on:
       - elasticsearch 
-      - kibana
-      - logstash
+      # - kibana
+      # - logstash
+
   metricbeat:
     build: ./metricbeat/
+    container_name: metricbeat
+
     networks: 
       - elk
     depends_on:
       - elasticsearch 
-      - kibana
-      - logstash
+      # - kibana
+      # - logstash
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - /sys/fs/cgroup:/hostfs/sys/fs/cgroup:ro
       - /proc:/hostfs/proc:ro
       - /:/hostfs:ro
+  elastalert:
 
+    build: ./elastalert/
+    #   context: .
+    #   dockerfile: Dockerfile
+    image: hariomsaini/elastalert
+    container_name: elastalert
+    ports:
+      "3030:3030"
+      "3333:3333"
+    networks:
+      - elk
+    volumes:
+      - ./elastalert/config/elastalert.yaml:/opt/elastalert/config.yaml
+      - ./elastalert/config/elastalert-test.yaml:/opt/elastalert/config-test.yaml
+      - ./elastalert/config/config.json:/opt/elastalert-server/config/config.json
+      - ./elastalert/rules:/opt/elastalert/rules
+      - ./elastalert/rule_templates:/opt/elastalert/rule_templates
 networks:
-
   elk:
     driver: bridge
