@@ -74,15 +74,19 @@ services:
       - /proc:/hostfs/proc:ro
       - /:/hostfs:ro
   elastalert:
-
-    build: ./elastalert/
-    #   context: .
+    build:
+      context: ./elastalert/
     #   dockerfile: Dockerfile
     image: hariomsaini/elastalert
     container_name: elastalert
     ports:
+<<<<<<< HEAD
       - "3030:3030"
       - "3333:3333"
+=======
+      - 3030:3030
+      - 3333:3333
+>>>>>>> ad1c0cc77ac5d805e0da53b64790f56cfc4ad8fa
     networks:
       - elk
     volumes:
