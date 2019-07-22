@@ -7,8 +7,7 @@ build:
 	docker build --build-arg ELASTALERT_VERSION=$(v) -t hariomsaini/elastalert .
 
 server: build
-	docker run -it --rm -p 3030:3030 \
-	--net="host" \
-	elastalert:latest
+	docker run -it --rm -p 3030:3030  \
+	hariomsaini/elastalert:latest
 
 .PHONY: build
